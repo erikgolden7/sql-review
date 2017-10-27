@@ -1,24 +1,25 @@
 import React, { Component } from 'react'
-import './ChatWindow.css'
+import './Products.css'
 import axios from 'axios'
 
-export default class ChatWindow extends Component {
+export default class Products extends Component {
 	constructor() {
 		super()
+
 		this.state = {
-			messages: []
+			products: []
 		}
 
-		this.handleChange = this.handleChange.bind(this)
-		this.createMessage = this.createMessage.bind(this)
-		this.editMessage = this.editMessage.bind(this)
-		this.removeMessage = this.removeMessage.bind(this)
+		// this.handleChange = this.handleChange.bind(this)
+		// this.createMessage = this.createMessage.bind(this)
+		// this.editMessage = this.editMessage.bind(this)
+		// this.removeMessage = this.removeMessage.bind(this)
 	}
 
 	componentDidMount() {
-		console.log(this.state.text)
-		axios.get('/api/messages').then(response => {
-			this.setState({ messages: response.data })
+		axios.get('/api/products').then(response => {
+			console.log(response.data)
+			this.setState({ products: response.data })
 		})
 	}
 
@@ -26,7 +27,7 @@ export default class ChatWindow extends Component {
 		this.setState({ text: event.target.value })
 	}
 
-	createMessage(event) {
+	createProduct(event) {
 		const { text, user } = this.state
 		if (event.key === 'Enter' && text.length !== 0) {
 			axios.post(url, { user, text, time: dateCreator() }).then(response => {
@@ -36,45 +37,41 @@ export default class ChatWindow extends Component {
 			this.setState({ text: '' })
 		}
 	}
-
-	editMessage(id, text) {
-		console.log('editMessage:', id, text)
-		axios.put(url + `/${id}`, { text }).then(response => {
-			this.setState({ messages: response.data })
-		})
-	}
-
-	removeMessage(id) {
-		axios.delete(url + `/${id}`).then(response => {
-			this.setState({ messages: response.data })
-		})
-	}
+	//
+	// editMessage(id, text) {
+	// 	console.log('editMessage:', id, text)
+	// 	axios.put(url + `/${id}`, { text }).then(response => {
+	// 		this.setState({ messages: response.data })
+	// 	})
+	// }
+	//
+	// removeMessage(id) {
+	// 	axios.delete(url + `/${id}`).then(response => {
+	// 		this.setState({ messages: response.data })
+	// 	})
+	// }
 
 	render() {
 		return (
-			<div id="ChatWindow__container">
-				<div id="ChatWindow__messagesParentContainer">
-					<div id="ChatWindow__messagesChildContainer">
-						{this.state.messages.map(message => (
-							<Message
-								id={message.id}
-								key={message.id}
-								text={message.text}
-								time={message.time}
-								user={message.user}
-								edit={this.editMessage}
-								remove={this.removeMessage}
-							/>
-						))}
-					</div>
+			<div>
+				<div>
+					{this.state.products.map(product => (
+						<ProductItem
+							name={product.name}
+							description={product.description}
+							time={product.price}
+						/>
+					))}
 				</div>
-				<div id="ChatWindow__newMessageContainer">
+
+				<div>
 					<input
-						placeholder="What's on your mind? Press enter to send."
-						onKeyPress={this.createMessage}
+						placeholder="Add a product"
+						onKeyPress={this.createProduct}
 						onChange={this.handleChange}
 						value={this.state.text}
 					/>
+					<input type="text" />
 				</div>
 			</div>
 		)
