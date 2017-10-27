@@ -15,8 +15,12 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-			{ test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+			{ test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
+			{ test: /\.css$/, loader: 'style-loader!css-loader' }
 		]
 	},
-	plugins: [HtmlWebpackPluginConfig]
+	plugins: [HtmlWebpackPluginConfig],
+	resolve: {
+		extensions: ['.js', '.css']
+	}
 }
